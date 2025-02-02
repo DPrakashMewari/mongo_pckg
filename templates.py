@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-package_name = "mongodb_pckg"
+package_name = "mongo_pckg"
 
 list_of_files = [
    ".github/workflows/ci.yaml",
