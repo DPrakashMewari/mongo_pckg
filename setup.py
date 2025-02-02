@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 __version__ = "0.0.4"
-REPO_NAME = "mongodb_pkg"
-PKG_NAME = "dbauto"
+REPO_NAME = "mongo_pckg"
+PKG_NAME = "MongoPU"
 AUTHOR_USER_NAME = "prakashM"
 AUTHOR_EMAIL = "prakash.mewari@yahoo.com"
 
