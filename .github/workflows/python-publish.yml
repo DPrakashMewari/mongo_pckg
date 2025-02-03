@@ -1,9 +1,10 @@
-# This workflow will upload a Python Package to PyPI when a release is created.
-# For more information, see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
+# This workflow will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support documentation.
+# separate terms of service, privacy policy, and support
+# documentation.
 
 name: Upload Python Package
 
@@ -13,59 +14,37 @@ on:
 
 permissions:
   contents: read
-  id-token: write  # This is required for trusted publishing to PyPI
 
 jobs:
-  release-build:
+  deploy:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      - name: Install build dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install build
-
-      - name: Build release distributions
-        run: python -m build
-
-      - name: Upload distributions for later use
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
-
-  pypi-publish:
-    runs-on: ubuntu-latest
-    needs: release-build
-    permissions:
-      id-token: write  # Required for publishing to PyPI securely
-
-    environment:
-      name: pypi
-      # Optional: uncomment and update with your PyPI project URL if you want to link it
-      # url: https://pypi.org/project/YOURPROJECT/${{ github.event.release.name }}
-
-    steps:
-      - name: Retrieve release distributions
-        uses: actions/download-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
-
-      - name: Install Twine for PyPI upload
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install twine
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.10.0  # Pin the version of this action to ensure stability
-        with:
-          packages-dir: dist/
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        pip install -r requirements.txt
+        pip install build
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        pytest -v    
+    - name: Build package
+      run: python -m build
+    - name: Publish package
+      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
