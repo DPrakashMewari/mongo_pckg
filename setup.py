@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 __version__ = "0.0.4"
 REPO_NAME = "mongo_pckg"
-PKG_NAME = "MongoPU"
+PKG_NAME = "mongo_pckg"
 AUTHOR_USER_NAME = "prakashM"
 AUTHOR_EMAIL = "prakash.mewari@yahoo.com"
 
