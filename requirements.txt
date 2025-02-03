@@ -6,4 +6,3 @@ numpy
 ensure
 pytest
 
--e .

@@ -19,7 +19,7 @@ setup(
         "Bug Tracker": f"https://github.com/{AUTHOR_USER_NAME}/{REPO_NAME}/issues",
     },
     package_dir={"": "src"},
-    packages=find_packages(where="src"),  # Automatically find packages in the src folder
+    # packages=find_packages(where="src"),  # Automatically find packages in the src folder
     install_requires=[  # External dependencies should go here
         'pymongo',
         'pymongo[srv]',
